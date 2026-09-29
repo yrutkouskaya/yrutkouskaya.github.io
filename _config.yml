@@ -12,3 +12,19 @@ defaults:
       path: ""
     values:
       layout: default
+
+# Keep Claude instruction files out of the published site.
+# Setting `exclude` replaces Jekyll's defaults, so those are repeated here.
+exclude:
+  - CLAUDE.md
+  - .claude/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/

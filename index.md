@@ -8,4 +8,4 @@ nav_order: 1
 
 This is some mock text to test the publishing flow. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-Check out the [temporary example page](temp-example/example/) to see how a page in a subfolder looks.
+Check out the [temporary example section](temp-example/) to see how a folder with a parent page and a child page looks.

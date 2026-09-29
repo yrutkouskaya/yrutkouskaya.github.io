@@ -1,11 +1,13 @@
 ---
-title: Temp Example
-nav_order: 2
+title: Example Page
+layout: default
+parent: Temp Example
+nav_order: 1
 ---
 
-# Temp Example
+# Example Page
 
-This is a temporary page inside the `temp-example` folder, created to test the full commit and deploy flow.
+This is a child page inside the `temp-example` folder, served at `/temp-example/example/`.
 
 ## Mock section
 
@@ -14,5 +16,3 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 - Mock item one
 - Mock item two
 - Mock item three
-
-You can delete this folder any time.

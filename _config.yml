@@ -1,3 +1,14 @@
 title: Knowledge base
 description: Medical KB
 theme: just-the-docs
+
+# Clean URLs: /temp-example/example/ instead of /temp-example/example.html
+permalink: pretty
+
+# Apply the theme's default layout to every page that has front matter.
+# Pages can still override it (e.g. index.md uses layout: home).
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

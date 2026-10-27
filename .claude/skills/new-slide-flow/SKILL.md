@@ -11,7 +11,7 @@ Work through the steps in order, one at a time. Ask one question per step and wa
 
 ## Step 1. The slide and the photos
 
-1. Ask what the new slide is about and what it should be called.
+1. Ask what the new slide is about and what it should be called (the page title, which becomes the sidebar label, and where it goes in the navigation).
 2. Ask the user to upload the photos for it.
 3. Do not start building until both are given.
 
@@ -20,11 +20,14 @@ Work through the steps in order, one at a time. Ask one question per step and wa
 - Use the slide-creation skill to turn the photos into a good slide.
 - **TBA:** that skill does not exist yet (planned: `.claude/skills/create-slide/SKILL.md`). Until it exists, tell the user it is not written yet and ask how they want the slide made. Do not invent the layout or file structure.
 - Show the user the draft and apply their changes until they are happy with it. Do not commit.
+- Finish this step by asking the user to approve the slide image. Do not ask for the description yet.
 
 ## Step 3. Description
 
+Only start this step after the user has approved the slide image in step 2.
+
 1. Ask the user for the description text, or offer to draft it from what they said in step 1.
-2. Add it to the slide. Fix wording and typos together with the user until they are happy with it.
+2. Add it to the page, using the user's exact wording. Fix wording and typos together with the user until they are happy with it.
 3. Do not commit.
 
 ## Step 4. Final look, then commit

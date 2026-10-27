@@ -13,6 +13,7 @@ Instructions for Claude when working in this repository.
 Read the matching skill before doing the task:
 
 - `.claude/skills/add-page/SKILL.md`: adding or changing pages, sections, navigation, and routes.
+- `.claude/skills/commit-and-push/SKILL.md`: committing and pushing any change to `main`.
 
 ## General rules
 

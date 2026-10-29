@@ -13,12 +13,11 @@ defaults:
     values:
       layout: default
 
-# Keep Claude instruction files and internal slide sources out of the published site.
+# Keep Claude instruction files out of the published site.
 # Setting `exclude` replaces Jekyll's defaults, so those are repeated here.
 exclude:
   - CLAUDE.md
   - .claude/
-  - _slide-sources/
   - .sass-cache/
   - .jekyll-cache/
   - gemfiles/

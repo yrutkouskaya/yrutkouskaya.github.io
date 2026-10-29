@@ -76,7 +76,7 @@ def rectify(src, dst, corners, aspect=None, long_side=2000):
 
 - **Size:** width = 2x the on-slide width, at most 1600 px wide for a half-slide picture and 2000 px for a full-width one. Never upscale a small photo to look bigger. Say so if the source is small.
 - **Weight:** aim for under 300 KB per file, hard limit 500 KB. Lower quality or size before accepting more.
-- **Location:** `assets/slides/<slug>/<short-name>.jpg` (or `.png`). It must be outside `_slide-sources/` and `.claude/`, which `_config.yml` excludes from the site.
+- **Location:** `assets/slides/<slug>/<short-name>.jpg` (or `.png`). It must be outside `.claude/`, which `_config.yml` excludes from the site.
 - **Names:** lowercase, hyphens, descriptive (`injection-points.jpg`, not `IMG_4471.jpg`).
 - Always set `width` and `height` attributes on `<img>` (the real pixel size) and `loading="lazy"`.
 

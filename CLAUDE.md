@@ -15,7 +15,7 @@ Read the matching skill before doing the task:
 - `.claude/skills/add-page/SKILL.md`: adding or changing pages, sections, navigation, and routes.
 - `.claude/skills/commit-and-push/SKILL.md`: committing and pushing any change to `main`.
 - `.claude/skills/new-slide-flow/SKILL.md`: adding a new slide, step by step (slide and photos, description, final look, then one commit at the end).
-- TBA, not written yet (do not look for the file): `.claude/skills/create-slide/SKILL.md`, which will turn uploaded photos into a slide. The new-slide flow will use it in step 2.
+- `.claude/skills/create-slide/SKILL.md`: turning uploaded photos into a slide (photo cleanup, slide markup, image files, pushing images). The new-slide flow uses it in step 2.
 
 ## General rules
 

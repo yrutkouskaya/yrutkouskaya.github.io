@@ -17,8 +17,7 @@ Work through the steps in order, one at a time. Ask one question per step and wa
 
 ## Step 2. Build the slide
 
-- Use the slide-creation skill to turn the photos into a good slide.
-- **TBA:** that skill does not exist yet (planned: `.claude/skills/create-slide/SKILL.md`). Until it exists, tell the user it is not written yet and ask how they want the slide made. Do not invent the layout or file structure.
+- Follow `.claude/skills/create-slide/SKILL.md` to turn the photos into the slide.
 - Show the user the draft and apply their changes until they are happy with it. Do not commit.
 - Finish this step by asking the user to approve the slide image. Do not ask for the description yet.
 
@@ -35,5 +34,5 @@ Only start this step after the user has approved the slide image in step 2.
 1. Show the complete result: every file that will be added or changed, the final slide, and the description.
 2. Ask the user to approve it or ask for more changes. Go back to the right earlier step for any change.
 3. Only after explicit approval, follow `.claude/skills/commit-and-push/SKILL.md` to commit everything in **one** commit to `main`.
-4. If the slide includes image files, check before committing whether they can be pushed. The GitHub connector takes text content, so binary photos may not go through. Tell the user about this before the final commit, not after.
+4. If the slide includes image files, tell the user before the final commit that images are pushed through the GitHub API with a token, because the GitHub connector takes text only. Section "Pushing" of the create-slide skill describes how, and ask for the token at that point.
 5. After the push, give the user the Actions tab link and the expected page URL, as the commit-and-push skill describes.

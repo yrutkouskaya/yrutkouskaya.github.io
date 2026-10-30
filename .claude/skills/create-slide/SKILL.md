@@ -9,6 +9,7 @@ A slide here is **HTML markup plus image files**, not one big picture and not an
 
 - Slide text (title, body, table data, descriptions, captions, sources) is **real HTML text**, so the site search finds it.
 - Photos and graphics are **PNG or JPEG files** referenced with `<img>`. Text that is part of a picture stays in the picture.
+- Every slide has a **16:9 canvas**, whatever the ratio of the source photo. Fit the content into 16:9 and keep its order and proportions (see section 6).
 - Nothing is committed until the user approves (see `new-slide-flow`). Binary files are pushed with the API route in "Pushing", not the GitHub connector.
 
 ## 1. Look before touching
@@ -16,6 +17,7 @@ A slide here is **HTML markup plus image files**, not one big picture and not an
 1. View every uploaded photo. Decide for each: *content photo* (a picture that goes on the slide, e.g. a clinical photo or diagram) or *source photo* (a photo of a slide, page or table that you read the text from).
 2. A source photo gives you text. It is **not** published as it is: no table, hands, desk or neighbouring objects in the result.
 3. If the photo is too blurry, dark or glared to read reliably, ask for a re-shoot instead of guessing. Say what is wrong ("the dose line is cut off by glare").
+4. If the photo cuts off part of the slide (edges of the frame, a hand, a reflection), **ask the user** whether to complete the missing parts. Plain decoration (a shape, a frame, a background) can be completed when the user says yes. Missing text or pictures cannot be completed: ask for a better photo.
 
 ## 2. Privacy check (this is a medical knowledge base)
 
@@ -38,7 +40,7 @@ Work on a copy. Keep the original untouched in the sandbox. **Do not commit orig
    - Put the corners 2 to 4 px **inside** the edge, or crop 1 to 2 % afterwards, so the border line and background do not leak in.
    - Curved book pages cannot be flattened perfectly. Crop tighter to the flatter part and accept a little curve instead of stretching the text.
 4. **Crop the garbage.** Remove table, hands, fingers, bezels, other slides, UI chrome, reflections at the edges. Cropping is the default tool.
-5. **Light.** Fix white balance and exposure, lift shadows, even out a gradient (divide by a heavily blurred copy for paper or whiteboards), then a gentle contrast curve. For screens with moiré, downscale first, then blur very slightly.
+5. **Light.** For a photo of a screen, take the white balance from a known light area of the slide (for example the background): measure its mean colour and scale each channel to a neutral light grey. Take any colours you reuse in CSS from the corrected photo, not the raw one. Then fix exposure, lift shadows, even out a gradient (divide by a heavily blurred copy for paper or whiteboards), then a gentle contrast curve. For screens with moiré, downscale first, then blur very slightly.
 6. **Sharpen last**, lightly (unsharp mask, radius about 1 px, amount about 0.5). Never sharpen before resizing.
 
 **Fidelity rules (medical content):**
@@ -98,10 +100,9 @@ def rectify(src, dst, corners, aspect=None, long_side=2000):
 
 **Transcription rules:**
 
-- Copy the wording exactly as on the source. Keep the user's language, abbreviations, and units (`U`, `mm`, `%`, ranges with an en dash).
+- Follow the slide text exactly as it is on the source: wording, spelling, capitals, hyphenation, abbreviations, units and the user's language (`U`, `mm`, `%`, ranges with an en dash). Do not correct, normalise or rewrite it, and do not ask about it. Only ask when something is unclear or missing (covered, cut off, glare).
 - Read **every number, dose and unit twice** against the photo. Never guess.
-- Anything not readable: write `[illegible]` in the draft and list it for the user. Do not fill gaps from memory or medical knowledge.
-- If the source looks wrong (a typo, an implausible dose), **keep it and flag it** to the user. Do not silently fix it.
+- Anything unclear or missing: stop and ask the user before building. Do not guess and do not fill gaps from memory or medical knowledge.
 - Do not add content the source does not have. No extra bullets, no "helpful" context.
 - Tables: keep the same rows, columns and order. Merged cells: repeat or use `colspan`.
 - Order by reading order of the source, not by where text sits on the page.
@@ -161,17 +162,39 @@ The rules that start with `.slide h1`, `.slide ul`, `.slide table` and so on del
 ```
 
 - `markdown="0"` keeps kramdown from touching the HTML. No blank lines inside the block.
+- If the source slide has no title (or eyebrow), leave out the `<header>` and the `<h1>`. Do not invent one. The `aria-label` carries the name, and the page title is the sidebar label.
 - For a table slide, replace the list with `<table class="slide__table">` (`<thead>` and `<tbody>`, `<th scope="col">`). For a picture-only slide, drop the text column and set the figure to span both columns.
 - Slide text containing `{{` or `{%` must be wrapped in `{% raw %}...{% endraw %}`, or Liquid will eat it.
 - The image CSS uses `width:100%; height:auto`, so the picture keeps its own proportions and the layout never crops it. Do not add `object-fit: cover`.
 - The slide must be a **100 % copy** of the source slide: every piece of slide text, every table row and cell, every picture, in the same order and structure. Never drop, shorten, merge, or split content to make it fit. If it does not fit the layout, change the layout, not the content.
 - Only the slide itself goes in this skill. The description that follows the slide (step 3 of `new-slide-flow`) is plain Markdown below the `</div>`.
 
+### Diagram and infographic slides
+
+When the slide is a drawing (pyramid, flow, boxes, arrows, speech bubbles), rebuild it instead of publishing the photo:
+
+- Plain shapes are CSS: `clip-path: polygon(...)` for triangles and arrows, `border-radius` for bubbles and frames, absolutely positioned inside `.slide__canvas`. Use `cqw` for every position and size, measured on the 1920 x 1080 design (`cqw = px / 19.2`).
+- Text inside the drawing is slide text, so it is real HTML (section 5), placed over the shape. DOM order follows the reading order of the source. Use `z-index` for layering, not DOM order.
+- Small pictures and icons are cut out of the photo as transparent PNGs (masking the background is allowed, see the fidelity rules). Do not upscale them.
+- Background removal: for light icons on a light background, flood-fill from the edges with a small fixed tolerance (about 9 to 12 per channel) works best. `cv2.grabCut` works for dark icons but eats light parts. Then clear leftover border fragments by hand and check the result on a contrasting colour (for example pink) before using it.
+
+```python
+def cut(wb, box, tol, dst, clear=()):          # wb = white-balanced BGR image
+    x0, y0, x1, y1 = box; c = wb[y0:y1, x0:x1].copy(); h, w = c.shape[:2]
+    ff = np.zeros((h+2, w+2), np.uint8); f = c.copy()
+    for sx, sy in [(0,0),(w-1,0),(0,h-1),(w-1,h-1),(w//2,h-1),(0,h//2),(w-1,h//2),(w//2,0)]:
+        cv2.floodFill(f, ff, (sx, sy), (255,0,255), (tol,)*3, (tol,)*3, flags=4|cv2.FLOODFILL_FIXED_RANGE|(255<<8))
+    a = 255 - (ff[1:-1,1:-1] > 0).astype(np.uint8)*255
+    for cx0, cy0, cx1, cy1 in clear: a[cy0:cy1, cx0:cx1] = 0
+    a = cv2.GaussianBlur(cv2.morphologyEx(a, cv2.MORPH_OPEN, np.ones((2,2), np.uint8)), (0,0), 0.7)
+    Image.fromarray(np.dstack([cv2.cvtColor(c, cv2.COLOR_BGR2RGB), a]), "RGBA").save(dst, optimize=True)
+```
+
 ## 7. Check before showing the user
 
-1. Render the page body in a standalone HTML file with Playwright, once at about 1280 px and once at about 420 px wide, and view the screenshots. Check: nothing cut off, nothing overlapping, text readable, picture not distorted.
+1. Render the page body in a standalone HTML file with Playwright at about 1280 px wide and view the screenshot. Check: nothing cut off, nothing overlapping, text readable, picture not distorted, canvas is 16:9.
 2. Compare the transcription with the source photo line by line, numbers last.
-3. Show the user the render plus the list of anything illegible, flagged, or changed by cropping.
+3. Show the user the render plus what you asked about, and what you changed by cropping, masking or completing.
 4. The sandbox cannot build Jekyll (no access to rubygems), so theme interaction is only checked after deploy. After the push, open the live page and look at it. A needed fix is a separate small commit, and you should tell the user so.
 
 ## 8. Pushing (images included)

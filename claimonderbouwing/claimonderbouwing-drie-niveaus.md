@@ -1,6 +1,7 @@
 ---
 title: "Claimonderbouwing: drie niveaus"
-nav_order: 3
+parent: Claimonderbouwing
+nav_order: 1
 ---
 
 {% include slide-style.html %}
@@ -28,8 +29,8 @@ nav_order: 3
 <li>Herstelt de keratine-structuur van het haar op moleculair niveau</li>
 </ul>
 </div>
-<img class="pyr__icon pyr__icon--skin" src="/assets/slides/claimonderbouwing-drie-niveaus/huid-doorsnede.png" width="86" height="76" alt="Doorsnede van huid met haren" loading="lazy">
-<img class="pyr__icon pyr__icon--micro" src="/assets/slides/claimonderbouwing-drie-niveaus/microscoop.png" width="74" height="108" alt="Microscoop" loading="lazy">
+<img class="pyr__icon pyr__icon--skin" src="/claimonderbouwing/images/claimonderbouwing-drie-niveaus/huid-doorsnede.png" width="86" height="76" alt="Doorsnede van huid met haren" loading="lazy">
+<img class="pyr__icon pyr__icon--micro" src="/claimonderbouwing/images/claimonderbouwing-drie-niveaus/microscoop.png" width="74" height="108" alt="Microscoop" loading="lazy">
 <div class="pyr__level pyr__level--2">
 <h2>2. SUBJECTIEVE TESTEN</h2>
 <ul>
@@ -38,14 +39,14 @@ nav_order: 3
 <li>ENQUÊTES &amp; VRAGENLIJST</li>
 </ul>
 </div>
-<img class="pyr__icon pyr__icon--faded" src="/assets/slides/claimonderbouwing-drie-niveaus/puntjes-ballon.png" width="50" height="46" alt="Tekstballon met drie puntjes" loading="lazy">
+<img class="pyr__icon pyr__icon--faded" src="/claimonderbouwing/images/claimonderbouwing-drie-niveaus/puntjes-ballon.png" width="50" height="46" alt="Tekstballon met drie puntjes" loading="lazy">
 <div class="pyr__bubble pyr__bubble--2">
 <ul>
 <li>95% vindt het haar er glanzender uitzien</li>
 <li>De huid voelt zachter aan</li>
 </ul>
 </div>
-<img class="pyr__icon pyr__icon--heart" src="/assets/slides/claimonderbouwing-drie-niveaus/hartje-ballon.png" width="56" height="57" alt="Tekstballon met hartje" loading="lazy">
+<img class="pyr__icon pyr__icon--heart" src="/claimonderbouwing/images/claimonderbouwing-drie-niveaus/hartje-ballon.png" width="56" height="57" alt="Tekstballon met hartje" loading="lazy">
 <div class="pyr__level pyr__level--1">
 <h2>1. ALGEMEEN GEACCEPTEERD BEWIJS</h2>
 <ul>
@@ -54,7 +55,7 @@ nav_order: 3
 <li>DATA VAN LEVERANCIERS</li>
 </ul>
 </div>
-<img class="pyr__icon pyr__icon--book" src="/assets/slides/claimonderbouwing-drie-niveaus/boek-kolf-vergrootglas.png" width="120" height="92" alt="Opengeslagen boek, kolf en vergrootglas" loading="lazy">
+<img class="pyr__icon pyr__icon--book" src="/claimonderbouwing/images/claimonderbouwing-drie-niveaus/boek-kolf-vergrootglas.png" width="120" height="92" alt="Opengeslagen boek, kolf en vergrootglas" loading="lazy">
 <div class="pyr__bubble pyr__bubble--1">
 <ul>
 <li>voor de vette huid</li>

@@ -10,7 +10,22 @@ A slide here is **HTML markup plus image files**, not one big picture and not an
 - Slide text (title, body, table data, descriptions, captions, sources) is **real HTML text**, so the site search finds it.
 - Photos and graphics are **PNG or JPEG files** referenced with `<img>`. Text that is part of a picture stays in the picture.
 - Every slide has a **16:9 canvas**, whatever the ratio of the source photo. Fit the content into 16:9 and keep its order and proportions (see section 6).
+- Slides are grouped in folders. A new slide goes into an **existing folder or a new folder, never into the repo root**, and every file that belongs to it lives inside that folder (see "Where slides live").
 - Nothing is committed until the user approves (see `new-slide-flow`). Binary files are pushed with the API route in "Pushing", not the GitHub connector.
+
+## Where slides live
+
+```
+<folder>/
+  index.md                    (parent page of the folder, title = sidebar label)
+  <slide>.md                  (one page per slide, parent: <folder title>)
+  images/<slide>/<name>.png   (all picture files of that slide)
+```
+
+- Pick the folder with the user: use an existing folder, or create a new one (lowercase, hyphens). A new folder needs its own `index.md` with front matter (`title`, `nav_order`), as in `add-page`.
+- Never create a slide `.md` in the repo root. Never put slide images in a shared top-level folder.
+- Slides do not reuse files from other folders. The only shared file is `_includes/slide-style.html` (common styling).
+- Moving a slide means moving its page and its images together, then fixing the `parent`, `nav_order` and `img src` paths.
 
 ## 1. Look before touching
 
@@ -78,7 +93,7 @@ def rectify(src, dst, corners, aspect=None, long_side=2000):
 
 - **Size:** width = 2x the on-slide width, at most 1600 px wide for a half-slide picture and 2000 px for a full-width one. Never upscale a small photo to look bigger. Say so if the source is small.
 - **Weight:** aim for under 300 KB per file, hard limit 500 KB. Lower quality or size before accepting more.
-- **Location:** `assets/slides/<slug>/<short-name>.jpg` (or `.png`). It must be outside `.claude/`, which `_config.yml` excludes from the site.
+- **Location:** `<folder>/images/<slide>/<short-name>.jpg` (or `.png`), inside the slide's own folder (see "Where slides live"). It must be outside `.claude/`, which `_config.yml` excludes from the site.
 - **Names:** lowercase, hyphens, descriptive (`injection-points.jpg`, not `IMG_4471.jpg`).
 - Always set `width` and `height` attributes on `<img>` (the real pixel size) and `loading="lazy"`.
 
@@ -109,7 +124,7 @@ def rectify(src, dst, corners, aspect=None, long_side=2000):
 
 ## 6. Build the page
 
-File: `<slug>.md` in the repo root, or inside a section folder, with front matter as in `add-page` (`title`, `nav_order`, `parent` if needed).
+File: `<folder>/<slide>.md`, never in the repo root. Front matter as in `add-page`: `title`, `parent` (the folder's `index.md` title) and `nav_order` among the slides of that folder.
 
 **Shared styles.** If `_includes/slide-style.html` does not exist, create it first (CSS below). It is kept in one place so all slides look the same. Sizes use `cqw` (1% of slide width) so the whole slide scales like the old SVG slides. Convert from the 1920 px design size: `cqw = px / 19.2`.
 
@@ -154,7 +169,7 @@ The rules that start with `.slide h1`, `.slide ul`, `.slide table` and so on del
 </ul>
 </div>
 <figure class="slide__figure">
-<img src="/assets/slides/<slug>/<name>.jpg" width="680" height="564" alt="One sentence on what the picture shows" loading="lazy">
+<img src="/<folder>/images/<slide>/<name>.jpg" width="680" height="564" alt="One sentence on what the picture shows" loading="lazy">
 </figure>
 </div>
 </section>
